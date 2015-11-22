@@ -12,38 +12,45 @@
 # Tell the viewers what's going to happen...
 echo "Starting up X11 session manager..."
 
-# Try to use GNOME's gdm session manager.  This comes first because if
-# gdm is on the machine then the user probably installed it and wants
-# to use it by default:
-if [ -x /usr/bin/gdm ]; then
-  exec /usr/bin/gdm -nodaemon
-fi
+# Try your preferred session manager. If it does not exist, use default one.
+# The rc.session should be a symlink to rc-file for your preferred session
+# manager, for example, if you use the SLiM, place the rc.slim under 
+#/etc/rc.d and create a symlink with name 'rc.session' to it.
+if [ -x /etc/rc.d/rc.session ]; then
+  exec /etc/rc.d/rc.session
+else
+  # Try to use GNOME's gdm session manager.  This comes first because if
+  # gdm is on the machine then the user probably installed it and wants
+  # to use it by default:
+  if [ -x /usr/bin/gdm ]; then
+    exec /usr/bin/gdm -nodaemon
+  fi
 
-# Someone thought that gdm looked prettier in /usr/sbin,
-# so look there, too:
-if [ -x /usr/sbin/gdm ]; then
-  exec /usr/sbin/gdm -nodaemon
-fi
+  # Someone thought that gdm looked prettier in /usr/sbin,
+  # so look there, too:
+  if [ -x /usr/sbin/gdm ]; then
+    exec /usr/sbin/gdm -nodaemon
+  fi
 
-# Not there?  OK, try to use KDE's kdm session manager:
-if [ -x /opt/kde/bin/kdm ]; then
-  exec /opt/kde/bin/kdm -nodaemon
-elif [ -x /usr/bin/kdm ]; then
-  exec /usr/bin/kdm -nodaemon
-fi
+  # Not there?  OK, try to use KDE's kdm session manager:
+  if [ -x /opt/kde/bin/kdm ]; then
+    exec /opt/kde/bin/kdm -nodaemon
+  elif [ -x /usr/bin/kdm ]; then
+    exec /usr/bin/kdm -nodaemon
+  fi
 
-# Look for SDDM as well:
-if [ -x /usr/bin/sddm ]; then
-  exec /usr/bin/sddm
-fi
+  # Look for SDDM as well:
+  if [ -x /usr/bin/sddm ]; then
+    exec /usr/bin/sddm
+  fi
 
-# If all you have is XDM, I guess it will have to do:
-if [ -x /usr/bin/xdm ]; then
-  exec /usr/bin/xdm -nodaemon
-elif [ -x /usr/X11R6/bin/xdm ]; then
-  exec /usr/X11R6/bin/xdm -nodaemon
+  # If all you have is XDM, I guess it will have to do:
+  if [ -x /usr/bin/xdm ]; then
+    exec /usr/bin/xdm -nodaemon
+  elif [ -x /usr/X11R6/bin/xdm ]; then
+    exec /usr/X11R6/bin/xdm -nodaemon
+  fi
 fi
-
 # error
 echo
 echo "Hey, you don't have KDM, GDM, or XDM.  Can't use runlevel 4 without"
