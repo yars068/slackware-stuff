@@ -1,0 +1,2 @@
+# Restore the brightness on startup:
+ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", RUN+="/etc/udev/brightness.sh restore"

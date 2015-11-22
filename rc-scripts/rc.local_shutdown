@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# To save the brightness on shutting down, you need to use brightness.sh:
+if [ -x /etc/udev/brightness.sh ] ; then
+    /etc/udev/brightness.sh store
+fi
