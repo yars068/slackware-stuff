@@ -1,0 +1,1 @@
+This repository contains my scripts, udev rules, patches and other Slackware related stuff.
